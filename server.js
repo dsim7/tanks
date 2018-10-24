@@ -25,15 +25,22 @@ class Bullet {
     this.x = x;
     this.y = y;
     this.angle = angle;
-    this.r = 10;
+    this.size = 15;
     this.moving = '';
-    this.lifetime = 5000;
+    this.lifeTime = 5000;
+    this.burstTime = 500;
+    this.burst = false;
+    this.burstSize = 30;
   }
 
   move() {
-    this.x += 10*Math.cos(this.angle);
-    this.y += 10*Math.sin(this.angle);
+    if (!this.burst) {
+      this.x += 10*Math.cos(this.angle);
+      this.y += 10*Math.sin(this.angle);
+    }
   }
+
+
 }
 
 
@@ -138,8 +145,11 @@ setInterval(() => {
   for (let i = bullets.length - 1; i >= 0; i--) {
     bullet = bullets[i];
     bullet.move();
-    bullet.lifetime -= 100;
-    if (bullet.lifetime < 0) {
+    bullet.lifeTime -= 100;
+    if (bullet.lifeTime < bullet.burstTime) {
+      bullet.burst = true;
+    }
+    if (bullet.lifeTime < 0) {
       bullets.splice(i, 1);
     }
   }
