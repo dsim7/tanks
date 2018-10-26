@@ -8,14 +8,28 @@
 </head>
 
 <body>
-    <div id="content">
-        TANKS
-        <script src="./js/canvas.js"></script>
+    <div class="container">
+        <div class="row">
+            <h1 id="title">Space Defense</h1>
+        </div>
+        <br/>
+        <div class="row">
+            <div id="gameView"></div>
+        </div>
+        <br/>
+        <div class="row uitext">
+            Life: <span id="life">0</span>
+        </div>
+        <div>
+            <button type="button" class="btn btn-danger btn-lg" onclick="startGame()">Start Game</button>
+            <button type="button" class="btn btn-warning btn-lg" onclick="resetGame()">Reset Game</button>
+        </div>
     </div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
     <script src="./js/client.js"></script>
+    <script src="./js/canvas.js"></script>
     <script src="./socket.io/socket.io.js"></script>
 </body>
 </html>
