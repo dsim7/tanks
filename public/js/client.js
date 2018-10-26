@@ -2,7 +2,15 @@
 var socket;
 
 $(function () {
+    username = sessionStorage.getItem('username');
+    if (username === null) {
+        window.location.href = './index.html';
+        return false;
+    }
+
     socket = io();
+
+    socket.emit('new user', username);
 
     socket.on('update', (newState) => {
         drawState = newState;

@@ -31,6 +31,10 @@ function draw() {
             let tank = drawState.tanks[i]
             if (tank !== null) {
                 image(tankImg, tank.x, tank.y, tank.w, tank.h);
+                if (tank.username !== undefined) {
+                    fill(150);
+                    text(tank.username, tank.x + 15, tank.y - 15);
+                }
             }
         }
 
@@ -57,5 +61,13 @@ function draw() {
         }
 
         $("#life").html(drawState.life);
+
+        $("#users").html('');
+        let clients = drawState.clients;
+        for (let clientKey in clients) {
+            let client = clients[clientKey];
+            let userText = client.username + (client.tank === undefined ? ' (Spectating)' : '');
+            $("#users").prepend('<div class="user">'+userText+'</div>');
+        }
     }
 }

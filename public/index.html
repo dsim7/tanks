@@ -12,24 +12,29 @@
         <div class="row">
             <h1 id="title">Space Defense</h1>
         </div>
+
         <br/>
-        <div class="row">
-            <div id="gameView"></div>
-        </div>
-        <br/>
-        <div class="row uitext">
-            Life: <span id="life">0</span>
-        </div>
-        <div>
-            <button type="button" class="btn btn-danger btn-lg" onclick="startGame()">Start Game</button>
-            <button type="button" class="btn btn-warning btn-lg" onclick="resetGame()">Reset Game</button>
-        </div>
+        <form>
+            <div class="form-group row infotext">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <label for="username">Username</label>
+                    <input class="form-control form-control-lg" type="text" id="username" autocomplete="off" maxlength="12">
+                </div>
+                <div class="col-xs-4"></div>
+                
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-tanks btn-lg round raised" onclick="goToGame()">Go</button>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </form>
     </div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
-    <script src="./js/client.js"></script>
-    <script src="./js/canvas.js"></script>
-    <script src="./socket.io/socket.io.js"></script>
+    <script src="./js/login.js"></script>
 </body>
 </html>

@@ -14,8 +14,8 @@ class Enemy {
     this.x = -100;
     this.w = ENEMY_W;
     this.h = ENEMY_H;
-    this.speed = 1;
-    this.life = 100;
+    this.speed = Math.random() * 2.25 + 0.75;
+    this.life = 60;
     this.animationTime = 0;
     this.animationTimeMax = 20;
     this.currentAnimation = 0;
@@ -34,6 +34,7 @@ class Enemy {
 
 class Tank {
   constructor(player, id) {
+    this.username = '';
     this.id = id;
     this.w = TANK_W;
     this.h = TANK_H;
@@ -123,25 +124,33 @@ let life = 5;
 let gamerunning = true;
 let gameover = false;
 let enemiesSpawning = false;
+let enemiesSpawnTimer;
 
 // On server connection, initialize socket
 io.on("connection", (socket) => {
   console.log("user " + socket.id + " connected");
 
-  clients[socket.id] = { };
-  if (tanks[0] === undefined) {
-    console.log("initializing player 1");
-    tanks[0] = new Tank(1, socket.id);
-    clients[socket.id].tank = tanks[0];
-  } else if (tanks[1] === undefined) {
-    console.log("initializing player 2");
-    tanks[1] = new Tank(2, socket.id);
-    clients[socket.id].tank = tanks[1];
-  }
-
-  console.log(tanks);
-  console.log(clients);
-
+  socket.on('new user', (username) => {
+    username = username.toUpperCase();
+    clients[socket.id] = { };
+    client = clients[socket.id];
+    client.username = username;
+    if (tanks[0] === undefined) {
+      console.log("initializing player 1");
+      tanks[0] = new Tank(1, socket.id);
+      client.tank = tanks[0];
+      client.tank.username = username;
+    } else if (tanks[1] === undefined) {
+      console.log("initializing player 2");
+      tanks[1] = new Tank(2, socket.id);
+      client.tank = tanks[1];
+      client.tank.username = username;
+    }
+  
+    console.log(tanks);
+    console.log(clients);  
+  });
+  
   socket.on('gamereset', (msg) => {
     resetGame();
 
@@ -151,13 +160,17 @@ io.on("connection", (socket) => {
   socket.on('gamestart', (msg) => {
     resetGame();
 
+    if (enemiesSpawnTimer !== undefined) {
+      clearTimeout(enemiesSpawnTimer);
+    }
+
     enemiesSpawning = true;
     spawnEnemy();
     (function spawnEnemiesLoop() {
       let minInterval = 500;
       let maxInterval = 4000;
-      var randTimeInterval = Math.round(Math.random() * maxInterval + minInterval);
-      setTimeout(() => {
+      let randTimeInterval = Math.round(Math.random() * maxInterval + minInterval);
+      enemiesSpawnTimer = setTimeout(() => {
               if (enemiesSpawning) {
                 spawnEnemy();
                 spawnEnemiesLoop();
@@ -293,5 +306,5 @@ setInterval(() => {
   if (gameover) {
     io.emit('gameover', '');
   }
-  io.emit('update', { life, tanks, bullets, enemies });
+  io.emit('update', { life, tanks, bullets, enemies, clients });
 }, 1000/fps);

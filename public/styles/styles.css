@@ -1,17 +1,89 @@
 
-#title { 
-    font-family: 'Courier New', Courier, monospace;
+
+
+#title {
     font-size: 4em;
-    color: white;
 }
 
 .uitext {
-    font-family: 'Courier New', Courier, monospace;
-    color: white;
     font-size: 3em;
 }
 
+.infotext {
+    font-size: 2em;
+}
+
+input[type="text"], textarea {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.8em;
+}
+
+#cyberbabediv {
+    position: relative;
+    text-align: left;
+    margin: 10%;
+}
+
+#cyberbabediv::after {
+    box-shadow: inset 0px 0px 40px 30px #000;
+    border-radius: 0%;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 100%;
+    width: 300px;
+    position: absolute;
+    float: left
+}
+
+.btn {
+    margin: 10px;
+    padding: 7px 24px;
+    border: 0 none;
+    font-weight: 550;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.btn.round {
+    border-radius: 40px;
+}
+
+.btn-tanks.raised {
+	box-shadow: 0 5px 0 0 #720202;
+}
+
+.btn-tanks.raised:active, .btn-tanks.raised.active {
+	background: #aa0202;
+	box-shadow: none;
+	margin-top: 15px;
+}
+
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+
+.btn-tanks {
+    background: #db0202;
+    color: white;
+}
+
+.btn-tanks:hover, .btn-tanks:focus, .btn-tanks:active, .btn-tanks.active, .open > .dropdown-toggle.btn-tanks {
+    background: #ee4c1b;
+}
+
+.btn-tanks:active, .btn-tanks.active {
+    background: #aa0202;
+    box-shadow: none;
+}
+
 body {
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
     text-align: center;
     background: black;
 
