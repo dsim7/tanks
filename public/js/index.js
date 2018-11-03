@@ -15,9 +15,10 @@ $(() => {
     if (username === null) {
         window.location.href = './index.html';
         return false;
-    } else {
-        view = new View();
-        controller = new Controller(view, username);
-        view.controller = controller;
     }
+
+    console.log("making view");
+    view = new View();
+    controller = new Controller(view, username);
+    view.controller = controller;
 });
