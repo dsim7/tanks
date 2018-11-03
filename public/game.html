@@ -21,27 +21,39 @@
 
         <br/>
 
-        <div class="row uitext">
-            <div class="col-lg-6"></div>
+        <div class="row">
             <div class="col-lg-6">
+                <div>'A' to move Left</div>
+                <div>'D' to move Right</div>
+                <div>'Click' to Shoot</div>
+            </div>
+            <div class="col-lg-6 uitext">
                 Life: <span id="life">0</span>
             </div>
         </div>
         
         <div>
-            <button type="button" class="btn btn-tanks btn-lg round raised" onclick="startGame()">Start</button>
-            <button type="button" class="btn btn-tanks btn-lg round raised" onclick="resetGame()">Reset</button>
+            <button type="button" class="btn btn-tanks btn-lg round raised" onclick="controller.startGame()">Start</button>
+            <button type="button" class="btn btn-tanks btn-lg round raised" onclick="controller.resetGame()">Reset</button>
         </div>
-
         <br/>
+
+        <div>
+            Press START to begin spawning enemies.
+            Press RESET to clear the enemies and reset health.
+        </div>
+        <br/>
+        
         <div class="infotext">Players</div>
         <div id="users" class="smalltext"></div>
     </div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
-    <script src="./js/client.js"></script>
-    <script src="./js/canvas.js"></script>
+    <script src="./js/controller.js"></script>
+    <script src="./js/view.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="./js/p5callbacks.js"></script>
     <script src="./socket.io/socket.io.js"></script>
 </body>
 </html>
