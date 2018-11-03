@@ -1,6 +1,6 @@
 "use strict"
 
-var view;
+var view = new View();
 var controller;
 
 $(() => {
@@ -18,7 +18,6 @@ $(() => {
     }
 
     console.log("making view");
-    view = new View();
     controller = new Controller(view, username);
     view.controller = controller;
 });
