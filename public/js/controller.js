@@ -12,7 +12,7 @@ class Controller {
         this.socket.emit('new user', this.username);
 
         this.socket.on('update', (newState) => {
-            this.view.drawState = newState;
+            this.view.setDrawState(newState);
         });
 
         this.socket.on('gamereset', (msg) => {

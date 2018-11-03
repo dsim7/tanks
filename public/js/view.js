@@ -13,6 +13,10 @@ class View {
         this.images = {};
 
     }
+    
+    setDrawState(drawState) {
+        this.drawState = drawState;
+    }
 
     draw() {
         if (this.canvas !== undefined && this.drawState !== undefined) {
@@ -27,19 +31,19 @@ class View {
     }
 
     drawBG() {
-        background(this.images["bg"]);
+        background(this.images["bg"]); // p5
     }
 
     drawTanks() {
         for (let i = 0; i < this.drawState.tanks.length; i++) {
             let tank = this.drawState.tanks[i]
             if (tank !== null) {
-                image(this.images["tank"], tank.x, tank.y, tank.width, tank.height);
+                image(this.images["tank"], tank.x, tank.y, tank.width, tank.height); // p5
                 if (tank.username !== undefined) {
-                    fill(150);
-                    textAlign(LEFT);
-                    textSize(12);
-                    text(tank.username, tank.x + 15, tank.y - 15);
+                    fill(150); // p5 
+                    textAlign(LEFT); // p5
+                    textSize(12); // p5
+                    text(tank.username, tank.x + 15, tank.y - 15); // p5
                 }
             }
         }
@@ -49,7 +53,8 @@ class View {
         for (let i = 0; i < this.drawState.enemies.length; i++) {
             let enemy = this.drawState.enemies[i];
             if (enemy !== null) {
-                image(enemy.currentAnimation == 0 ? this.images["enemy"] : this.images["enemy2"], enemy.x, enemy.y, enemy.width, enemy.height);
+                image(enemy.currentAnimation == 0 ? this.images["enemy"] : this.images["enemy2"],
+                    enemy.x, enemy.y, enemy.width, enemy.height); // p5
             }
         }
     }
@@ -58,19 +63,19 @@ class View {
         for (let i = 0; i < this.drawState.bullets.length; i++) {
             let bullet = this.drawState.bullets[i]
             if (bullet.burst) {
-                image(this.images["burst"], bullet.x, bullet.y, bullet.burstSize, bullet.burstSize);
+                image(this.images["burst"], bullet.x, bullet.y, bullet.burstSize, bullet.burstSize); // p5
             } else {
-                image(this.images["bullet"], bullet.x, bullet.y, bullet.size, bullet.size);
+                image(this.images["bullet"], bullet.x, bullet.y, bullet.size, bullet.size); // p5
             }
         }
     }
     
     drawGameOverText() {
         if (this.gameover) {
-            textAlign(CENTER);
-            fill(255, 0, 0);
-            textSize(40);
-            text("GAME OVER", CANVAS_X / 2, CANVAS_Y /2);
+            textAlign(CENTER); // p5
+            fill(255, 0, 0); // p5
+            textSize(40); // p5
+            text("GAME OVER", CANVAS_X / 2, CANVAS_Y /2); // p5
         }
     }
     
