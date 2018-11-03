@@ -1,5 +1,9 @@
 
-
+$(() => {
+    $('#go').on('click touchstart', () => {
+        goToGame();
+    });
+});
 
 goToGame = () => {
     let username = $('#username').val();
