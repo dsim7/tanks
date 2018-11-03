@@ -1,6 +1,6 @@
 
 // Import game classes
-let Model = require('model');
+let Model = require('./model');
 
 // Import express framework
 let express = require('express');

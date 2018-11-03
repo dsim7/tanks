@@ -1,7 +1,7 @@
 
-let Tank = require('tank');
-let Enemy = require('enemy');
-let Bullet = require('bullet');
+let Tank = require('./tank');
+let Enemy = require('./enemy');
+let Bullet = require('./bullet');
 
 class Model {
     constructor(io) {
