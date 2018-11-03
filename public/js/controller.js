@@ -1,6 +1,7 @@
 
 
 class Controller {
+    
     constructor(view, username) {
         this.view = view;
         this.username = username;

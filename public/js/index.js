@@ -1,12 +1,13 @@
+"use strict"
 
 var view;
 var controller;
 
 $(() => {
-    $('#reset').on('click touchstart', () => {
+    $('#start').on('click touchstart', () => {
         controller.startGame();
     });
-    $('#start').on('click touchstart', () => {
+    $('#reset').on('click touchstart', () => {
         controller.resetGame();
     });
 

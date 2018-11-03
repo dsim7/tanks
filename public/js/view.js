@@ -3,6 +3,7 @@ const CANVAS_X = 1000;
 const CANVAS_Y = 400;
 
 class View {
+    
     constructor() {
         this.controller = undefined;
         this.canvas = undefined;

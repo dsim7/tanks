@@ -1,8 +1,8 @@
-
+"use strict"
 
 // p5.js callbacks
 
-setup = () => {
+var setup = () => {
     view.images["bg"] = loadImage("assets/tanksbg.png");
     view.images["tank"] = loadImage("assets/tank.png");
     view.images["bullet"] = loadImage("assets/bullet.png");
@@ -18,19 +18,19 @@ setup = () => {
     });
 }
 
-draw = () => {
+var draw = () => {
     imageMode(CORNER);
     view.draw();
 }
 
 
-keyPressed = () => {
+var keyPressed = () => {
     if (view.controller !== undefined) {
         view.controller.move(keyCode);
     }
 }
 
-keyReleased = () => {
+var keyReleased = () => {
     if (view.controller !== undefined) {
         view.controller.stopMoving(keyCode);
     }

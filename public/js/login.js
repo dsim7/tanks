@@ -1,11 +1,8 @@
+"use strict"
 
-$(() => {
-    $('#go').on('click touchstart', () => {
-        goToGame();
-    });
-});
 
-goToGame = () => {
+
+var goToGame = () => {
     let username = $('#username').val();
     if (username == 0) {
         $('#warning').html('<p>Enter a username</p>');
@@ -15,3 +12,7 @@ goToGame = () => {
         return false;
     }
 }
+
+$(() => {
+    $('#go').on('click touchstart', goToGame);
+});
