@@ -69,7 +69,7 @@ class Model {
         
         // on game reset
         socket.on('gamereset', (msg) => {
-          if (this.clients[socket.id].tank !== undefined) {
+          if (this.clients[socket.id] != null && this.clients[socket.id].tank !== undefined) {
             this.resetGame();
             this.enemiesSpawning = false;
           }
@@ -77,7 +77,7 @@ class Model {
   
         // on game start
         socket.on('gamestart', (msg) => {
-          if (this.clients[socket.id].tank !== undefined) {
+          if (this.client[socket.id] != null && this.clients[socket.id].tank !== undefined) {
             this.resetGame();
   
             if (this.enemiesSpawnTimer !== undefined) {
