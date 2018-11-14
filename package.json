@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "a tanks game",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.15.2",
+    "firebase": "^5.5.8",
     "socket.io": "^2.1.1"
   }
 }
