@@ -3,21 +3,18 @@
 var view = new View();
 var controller;
 
-$(() => {
-    $('#start').on('click touchstart', () => {
-        controller.startGame();
-    });
-    $('#reset').on('click touchstart', () => {
-        controller.resetGame();
-    });
+firebase.auth().onAuthStateChanged( (user) => {
+    if (user) {
+        controller = new Controller(view, user.displayName, user.uid);
+        view.controller = controller;
 
-    let username = sessionStorage.getItem('username');
-    if (username === null) {
+        $('#start').on('click touchstart', () => {
+            controller.startGame();
+        });
+        $('#reset').on('click touchstart', () => {
+            controller.resetGame();
+        });
+    } else {
         window.location.href = './index.html';
-        return false;
     }
-
-    console.log("making view");
-    controller = new Controller(view, username);
-    view.controller = controller;
 });

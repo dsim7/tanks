@@ -95,6 +95,7 @@ class View {
     
     updateHtml() {
         $("#life").html(this.drawState.life);
+        $("#score").html(this.drawState.score);
     
         $("#users").html('');
         let clients = this.drawState.clients;

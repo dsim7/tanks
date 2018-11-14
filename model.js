@@ -12,6 +12,7 @@ class Model {
       this.bullets = [];
       this.enemies = [];
       this.life = 5;
+      this.score = 0;
       this.gamerunning = true;
       this.gameover = false;
       this.enemiesSpawning = false;
@@ -31,6 +32,7 @@ class Model {
         if (this.io !== undefined) {
           this.io.emit('update', {
             life : this.life,
+            score: this.score,
             tanks : this.tanks,
             bullets : this.bullets,
             enemies : this.enemies,
@@ -44,19 +46,19 @@ class Model {
         console.log("user " + socket.id + " connected");
   
         // on new user connect
-        socket.on('new user', (username) => {
-          username = username.toUpperCase();
+        socket.on('new user', (user) => {
+          let username = user.name.toUpperCase();
           this.clients[socket.id] = { };
           let client = this.clients[socket.id];
           client.username = username;
           if (this.tanks[0] === undefined) {
-            console.log("initializing player 1");
-            this.tanks[0] = new Tank(socket.id, (Model.canvas_width / 2), (Model.canvas_height - Tank.height));
+            console.log("initializing player 1 " + user.id);
+            this.tanks[0] = new Tank(socket.id, (Model.canvas_width / 2), (Model.canvas_height - Tank.height), user.id);
             client.tank = this.tanks[0];
             client.tank.username = username;
           } else if (this.tanks[1] === undefined) {
-            console.log("initializing player 2");
-            this.tanks[1] = new Tank(socket.id, (Model.canvas_width / 2), Tank.height);
+            console.log("initializing player 2 " + user.id);
+            this.tanks[1] = new Tank(socket.id, (Model.canvas_width / 2), Tank.height, user.id);
             client.tank = this.tanks[1];
             client.tank.username = username;
           }
@@ -75,9 +77,9 @@ class Model {
           }
         });
   
-        // on game start
+        // on game start`
         socket.on('gamestart', (msg) => {
-          if (this.client[socket.id] != null && this.clients[socket.id].tank !== undefined) {
+          if (this.clients[socket.id] != null && this.clients[socket.id].tank !== undefined) {
             this.resetGame();
   
             if (this.enemiesSpawnTimer !== undefined) {
@@ -154,6 +156,7 @@ class Model {
       this.gameover = false;
       this.gamerunning = true;
       this.life = 5;
+      this.score = 0;
       this.enemies.length = 0;
       this.bullets.length = 0;
     
@@ -174,6 +177,17 @@ class Model {
       this.gameover = true;
       this.gamerunning = false;
       this.enemiesSpawning = false;
+
+      let scoreObj = { score : this.score }
+      if (this.tanks[0] !== undefined) {
+        scoreObj.user1 = this.tanks[0].userID;
+        console.log(this.tanks[0].userID);
+      }
+      if (this.tanks[1] !== undefined) {
+        scoreObj.user2 = this.tanks[1].userID;
+        console.log(this.tanks[1].userID);
+      }
+      this.io.emit('score', scoreObj);
     }
     
     // spawn enemy
@@ -230,6 +244,7 @@ class Model {
         enemy.move();
         if (enemy.life <= 0) {
           this.enemies.splice(i, 1);
+          this.score++;
         } else if (enemy.x >= Model.canvas_width) {
           this.enemies.splice(i, 1);
           this.life--;

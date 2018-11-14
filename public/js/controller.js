@@ -3,13 +3,15 @@
 
 class Controller {
 
-    constructor(view, username) {
+    constructor(view, username, userID) {
         this.view = view;
         this.username = username;
         this.gamerunning = true;
         this.socket = io();
+        this.firebaseDatabase = firebase.database();
 
-        this.socket.emit('new user', this.username);
+        let userObj = { name : username, id : userID };
+        this.socket.emit('new user', userObj);
 
         this.socket.on('update', (newState) => {
             this.view.setDrawState(newState);
@@ -27,6 +29,11 @@ class Controller {
 
         this.socket.on('welcome', (msg) => {
             console.log(msg);
+        });
+
+        this.socket.on('score', (msg) => {
+            console.log(msg);
+            this.updateUserScores(msg.user1, msg.user2, msg.score);
         });
     }
 
@@ -65,5 +72,24 @@ class Controller {
     
     resetGame() {
         this.socket.emit('gamereset', '');
+    }
+
+    updateUserScores(user1, user2, score) {
+        if (user1 !== undefined) {
+            let dataref = this.firebaseDatabase.ref('scores/' + user1);
+            dataref.on('value', (snapshot) => {
+                if (parseInt(snapshot.val()) < score) {
+                    this.firebaseDatabase.ref('scores/' + user1).set(score);
+                }
+            });
+        }
+        if (user2 !== undefined) {
+            let dataref = this.firebaseDatabase.ref('scores/' + user2);
+            dataref.on('value', (snapshot) => {
+                if (parseInt(snapshot.val()) < score) {
+                    this.firebaseDatabase.ref('scores/' + user2).set(score);
+                }
+            });
+        }
     }
 }

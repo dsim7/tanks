@@ -2,7 +2,7 @@
 
 class Tank {
     
-    constructor(id, x, y) {
+    constructor(id, x, y, userID) {
         this.username = '';
         this.id = id;
         this.left = 0;
@@ -10,6 +10,7 @@ class Tank {
         this.currentShootCD = 0;
         this.shootCooldown = 10;
         this.canShoot = true;
+        this.userID = userID;
 
         this.y = y;
         this.x = x;
