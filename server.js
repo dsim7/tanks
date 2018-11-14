@@ -36,7 +36,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
 
-app.post('api/1.0/scores', (req, res) => {
+app.post('/api/1.0/scores', (req, res) => {
   let userId = req.body.userid;
   let token = req.body.apptoken;
   let ref = firebase.database().ref("tokens/"+token);
