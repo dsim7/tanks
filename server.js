@@ -41,12 +41,12 @@ app.post('/api/1.0/scores', (req, res) => {
   let token = req.body.apptoken;
 
   // verify token and see which app is calling
-  let appQuery = firebase.database().ref("externaltokens/"+token);
+  let appQuery = firebase.database().ref("tokens/badgebook");
   appQuery.once("value").then((snapshot) => {
-    let app = snapshot.val();
+    let apptoken = snapshot.val();
 
     // badgebook login
-    if (app == "badgebook") {
+    if (apptoken == "0c2e67ce-3f0e-4441-8fd3-2527bb88e880") {
       badgebookQuery(req, res);
 
     } else {
