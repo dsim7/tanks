@@ -38,10 +38,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
 
 app.post('/api/1.0/scores', (req, res) => {
-  let token = req.body.token;
+  let token = req.body.apptoken;
 
   // verify token and see which app is calling
-  let appQuery = firebase.database().ref("tokens/"+token);
+  let appQuery = firebase.database().ref("externaltokens/"+token);
   appQuery.once("value").then((snapshot) => {
     let app = snapshot.val();
 
@@ -56,9 +56,9 @@ app.post('/api/1.0/scores', (req, res) => {
   });
 });
 
-app.get('/badgebooklogin/:userId/:token', (req, res) => {
-  let token = req.params.token;
-  let badgebookUserId = req.params.userId;
+app.get('/badgebooklogin/:userid/:apptoken', (req, res) => {
+  let token = req.params.apptoken;
+  let badgebookUserId = req.params.userid;
   console.log(token);
   console.log(badgebookUserId);
   let externalTokenQuery = firebase.database().ref("externaltokens/"+token);
@@ -96,8 +96,8 @@ app.get('/badgebooklogin/:userId/:token', (req, res) => {
 });
 
 app.post('/badgebooklogin', (req, res) => {
-  let token = req.body.token;
-  let badgebookUserId = req.body.userId;
+  let token = req.body.apptoken;
+  let badgebookUserId = req.body.userid;
   let externalTokenQuery = firebase.database().ref("externaltokens/"+token);
   externalTokenQuery.once("value").then((snapshot) => {
     if (snapshot.val() == "badgebook") {
@@ -117,7 +117,7 @@ app.post('/badgebooklogin', (req, res) => {
 });
 
 var badgebookQuery = (req, res) => {
-  let badgebookUserId = req.body.userId;
+  let badgebookUserId = req.body.userid;
 
   let badgebookuserQuery = firebase.database().ref("badgebookid-user/"+badgebookUserId);
   badgebookuserQuery.once("value").then((snapshot) => {
@@ -125,9 +125,9 @@ var badgebookQuery = (req, res) => {
     let userQuery = firebase.database().ref("users/"+userId);
     userQuery.once("value").then((snapshot) => {
       let score = snapshot.child("score").val();
-      res.json({ 
+      res.json({
         score : score,
-        userId : badgebookUserId
+        userid : badgebookUserId
       });
       res.end();
     });
