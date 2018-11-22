@@ -44,7 +44,7 @@ class Model {
       // On server connection, initialize socket
       this.io.on("connection", (socket) => {
         console.log("user " + socket.id + " connected");
-  
+        
         // on new user connect
         socket.on('new user', (user) => {
           let username = user.name.toUpperCase();

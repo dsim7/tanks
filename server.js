@@ -18,6 +18,7 @@ firebase.initializeApp(config);
 // Import express framework
 let express = require('express');
 let bodyParser = require('body-parser');
+let request = require('request');
 
 // Create express app
 let app = express();
@@ -37,20 +38,121 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
 
 app.post('/api/1.0/scores', (req, res) => {
-  let userId = req.body.userid;
-  let token = req.body.apptoken;
-  let ref = firebase.database().ref("tokens/"+token);
-  ref.once("value").then((snapshot) => {
-    if (snapshot.val() != null) {
-      let ref2 = firebase.database().ref("scores/"+userId);
-      ref2.once("value").then((snapshot) => {
-        res.json({ score : snapshot.val() });
+  let token = req.body.token;
+
+  // verify token and see which app is calling
+  let appQuery = firebase.database().ref("tokens/"+token);
+  appQuery.once("value").then((snapshot) => {
+    let app = snapshot.val();
+
+    // badgebook login
+    if (app == "badgebook") {
+      badgebookQuery(req, res);
+
+    } else {
+      res.json("Invalid token");
+      res.end();
+    }
+  });
+});
+
+app.get('/badgebooklogin/:userId/:token', (req, res) => {
+  let token = req.params.token;
+  let badgebookUserId = req.params.userId;
+  console.log(token);
+  console.log(badgebookUserId);
+  let externalTokenQuery = firebase.database().ref("externaltokens/"+token);
+  externalTokenQuery.once("value").then((snapshot) => {
+    if (snapshot.val() == "badgebook") {
+      let badgebookuserQuery = firebase.database().ref("badgebookid-user/"+badgebookUserId);
+      badgebookuserQuery.once("value").then((snapshot) => {
+        let userId = snapshot.val();
+        if (userId) {
+          res.redirect('/game.html#'+userId);
+        } else {
+          console.log("making new entry")
+          // create entry for new user in users
+          let usersQuery = firebase.database().ref("users");
+          let newUserIdKey = usersQuery.push({
+              firebaseId : "BadgeBook ID",
+              username : "BadgeBook User",
+              score : 0
+          }).key;
+          let bbusersQuery = firebase.database().ref("badgebookid-user");
+          bbusersQuery.child(badgebookUserId).set(newUserIdKey).then(() => {
+            // redirect to game
+            res.redirect('/game.html#'+newUserIdKey);
+          });
+        }
+      }).catch(() => {
+        console.log("caught");
+      });
+    } else {
+      console.log("wrong token")
+      res.end();
+    }
+  });
+  
+});
+
+app.post('/badgebooklogin', (req, res) => {
+  let token = req.body.token;
+  let badgebookUserId = req.body.userId;
+  let externalTokenQuery = firebase.database().ref("externaltokens/"+token);
+  externalTokenQuery.once("value").then((snapshot) => {
+    if (snapshot.val() == "badgebook") {
+      let badgebookuserQuery = firebase.database().ref("badgebookid-user/"+badgebookUserId);
+      badgebookuserQuery.once("value").then((snapshot) => {
+        let userId = snapshot.val();
+        if (userId) {
+          res.redirect('/game.html#'+userId);
+        } else {
+          res.end();
+        }
       });
     } else {
       res.end();
     }
   });
 });
+
+var badgebookQuery = (req, res) => {
+  let badgebookUserId = req.body.userId;
+
+  let badgebookuserQuery = firebase.database().ref("badgebookid-user/"+badgebookUserId);
+  badgebookuserQuery.once("value").then((snapshot) => {
+    let userId = snapshot.val();
+    let userQuery = firebase.database().ref("users/"+userId);
+    userQuery.once("value").then((snapshot) => {
+      let score = snapshot.child("score").val();
+      res.json({ 
+        score : score,
+        userId : badgebookUserId
+      });
+      res.end();
+    });
+  });
+}
+
+var badgebookWriteOnWall = (userid) => {
+  let tokenQuery = firebase.database().ref("tokens/badgebook");
+  tokenQuery.once("value").then((snapshot) => {
+    let token = snapshot.val();
+    request.post(
+      'badgebook wall url',
+      { 
+        json : { 
+          token : token,
+          // ...
+        }
+      },
+      (error, response, body) => {
+        if (!error && response.statusCode == 200) {
+            console.log(body)
+        }
+      });
+  });
+}
 
 // app.get("/score/:uid", (req, res) => {
 //   let userJson = {};

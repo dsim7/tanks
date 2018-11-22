@@ -2,15 +2,18 @@
 
 const auth = firebase.auth();
 
+const badgebookLoginReturnURL = window.location.host + "/badgebooklogin"
+const badgebookLoginURL = "url";
+
 $(() => {
     $('#login').on('click touchstart', login);
     $('#register').on('click touchstart', createUser);
+    $('#bblogin').on('click touchstart', badgebookredirect);
 });
     
-var goToGame = (username) => {
-    sessionStorage.setItem('username', username);
+var goToGame = (userid) => {
+    sessionStorage.setItem('userid', userid);
     window.location.href = './game.html';
-    //window.location.href = './game.html';
     return false;
 }
 
@@ -24,8 +27,18 @@ const createUser = () => {
     password = $('#registerPassword').val();
     username = $('#registerUsername').val();
   
-    const promise = auth.createUserWithEmailAndPassword(email, password).then( () => { } );
-    promise.catch(e => alert(e.message));
+    const promise = auth.createUserWithEmailAndPassword(email, password).then( (signup) => {
+        let usersQuery = firebase.database().ref("users");
+        let userid = usersQuery.push({
+            firebaseId : signup.user.uid,
+            username : username,
+            score : 0
+        });
+        userid.then(() => {
+            goToGame(userid.key);
+        });
+    });
+    promise.catch((error) => alert(error));
 
     $('#registerEmail').val("");
     $('#registerPassword').val("");
@@ -33,27 +46,47 @@ const createUser = () => {
 }
 
 const login = () => {
+    console.log("login");
     email = $('#loginEmail').val();
     password = $('#loginPassword').val();
   
-    const promise = auth.signInWithEmailAndPassword(email, password);
+    auth.signInWithEmailAndPassword(email, password).then((signin) => {
+        console.log("authorized");
+        if (signin) {
+            console.log(signin);
+            if (signin.user.uid) {
+                console.log(signin.user.uid);
+                let usersQuery = firebase.database().ref("users");
+                usersQuery.orderByChild('firebaseId').equalTo(signin.user.uid).limitToFirst(1).once("value", (snapshot) => {
+                    snapshot.forEach((childsnapshot) => {
+                        let userid = childsnapshot.key;
+                        goToGame(userid);
+                    });
+                });
+            }
+        }
+    });
     $('#loginEmail').val("");
     $('#loginPassword').val("");
 }
 
-firebase.auth().onAuthStateChanged( (user) => {
-    if (user) {
-        if(username) {
-            user.updateProfile({
-                displayName : username,
-            }).then( () => {
-                goToGame(user.displayName);
-            }).catch( (error) => {
-                alert(error);
-            });
-        } else {
-            goToGame(user.displayName);
-        }    
-    }
-});
+const badgebookredirect = () => {
+    window.location.href = badgebookLoginURL + "#" + badgebookLoginReturnURL;
+}
+
+// firebase.auth().onAuthStateChanged( (user) => {
+//     if (user) {
+//         // if(username) {
+//         //     user.updateProfile({
+//         //         displayName : username,
+//         //     }).then( () => {
+//         //         goToGame(user.displayName);
+//         //     }).catch( (error) => {
+//         //         alert(error);
+//         //     });
+//         // } else {
+//         //     goToGame(user.displayName);
+//         // }    
+//     }
+// });
 

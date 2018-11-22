@@ -27,10 +27,6 @@ class Controller {
             this.gamerunning = false;
         });
 
-        this.socket.on('welcome', (msg) => {
-            console.log(msg);
-        });
-
         this.socket.on('score', (msg) => {
             console.log(msg);
             this.updateUserScores(msg.user1, msg.user2, msg.score);
@@ -75,21 +71,26 @@ class Controller {
     }
 
     updateUserScores(user1, user2, score) {
+        console.log(user1);
+        console.log(user2);
         if (user1 !== undefined) {
-            let dataref = this.firebaseDatabase.ref('scores/' + user1);
-            dataref.on('value', (snapshot) => {
-                if (parseInt(snapshot.val()) < score) {
-                    this.firebaseDatabase.ref('scores/' + user1).set(score);
+            let dataref = this.firebaseDatabase.ref('users/' + user1);
+            dataref.once("value").then( (snapshot) => {
+                console.log(snapshot.child("score"));
+                let curscore = snapshot.child("score").val();
+                if (curscore < score) {
+                    this.firebaseDatabase.ref('users/' + user1 + '/score').set(score);
                 }
-            });
+            }).catch((error) => alert(error));
         }
         if (user2 !== undefined) {
-            let dataref = this.firebaseDatabase.ref('scores/' + user2);
-            dataref.on('value', (snapshot) => {
-                if (parseInt(snapshot.val()) < score) {
-                    this.firebaseDatabase.ref('scores/' + user2).set(score);
+            let dataref = this.firebaseDatabase.ref('users/' + user2);
+            dataref.once("value").then( (snapshot) => {
+                let curscore = snapshot.child("score").val();
+                if (curscore < score) {
+                    this.firebaseDatabase.ref('users/' + user2 + '/score').set(score);
                 }
-            });
+            }).catch((error) => alert(error));
         }
     }
 }
