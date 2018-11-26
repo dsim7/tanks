@@ -38,8 +38,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
 
 app.post('/api/1.0/scores', (req, res) => {
-  let token = req.body.apptoken;
-
   // verify token and see which app is calling
   let appQuery = firebase.database().ref("tokens/badgebook");
   appQuery.once("value").then((snapshot) => {
@@ -126,8 +124,10 @@ var badgebookQuery = (req, res) => {
     userQuery.once("value").then((snapshot) => {
       let score = snapshot.child("score").val();
       res.json({
-        score : score,
-        userid : badgebookUserId
+        user: badgebookUserId,
+        appname: "Space Defense",
+        badgetype: "Score",
+        value: score
       });
       res.end();
     });
