@@ -51,11 +51,8 @@ const login = () => {
     password = $('#loginPassword').val();
   
     auth.signInWithEmailAndPassword(email, password).then((signin) => {
-        console.log("authorized");
         if (signin) {
-            console.log(signin);
             if (signin.user.uid) {
-                console.log(signin.user.uid);
                 let usersQuery = firebase.database().ref("users");
                 usersQuery.orderByChild('firebaseId').equalTo(signin.user.uid).limitToFirst(1).once("value", (snapshot) => {
                     snapshot.forEach((childsnapshot) => {
@@ -71,22 +68,10 @@ const login = () => {
 }
 
 const badgebookredirect = () => {
-    window.location.href = badgebookLoginURL + "#" + badgebookLoginReturnURL;
+    let badgebookTokenQuery = firebase.database().ref("externaltokens/badgebook");
+    badgebookTokenQuery.once("value").then((snapshot) => {
+        let token = snapshot.val();
+        console.log(window.location.href = badgebookLoginURL + "#" + badgebookLoginReturnURL + "#" + token);
+        window.location.href = badgebookLoginURL + "#" + badgebookLoginReturnURL + "#" + token;
+    });
 }
-
-// firebase.auth().onAuthStateChanged( (user) => {
-//     if (user) {
-//         // if(username) {
-//         //     user.updateProfile({
-//         //         displayName : username,
-//         //     }).then( () => {
-//         //         goToGame(user.displayName);
-//         //     }).catch( (error) => {
-//         //         alert(error);
-//         //     });
-//         // } else {
-//         //     goToGame(user.displayName);
-//         // }    
-//     }
-// });
-
