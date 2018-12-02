@@ -38,7 +38,8 @@ if (userid !== undefined && userid != null) {
             if (snapshot.val() == token) {
                 let userQuery = firebase.database().ref("users/"+userid);
                 userQuery.once("value").then((snapshot) => {
-                    if (snapshot.val() != null) {
+                    console.log(snapshot.val());
+                    if (snapshot.val() !== null) {
                         sessionStorage.setItem("userid", userid);
                         window.location.href = './game.html';
                     } else {
