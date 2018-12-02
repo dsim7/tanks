@@ -2,8 +2,8 @@
 
 const auth = firebase.auth();
 
-const badgebookLoginReturnURL = window.location.host + "/badgebooklogin"
-const badgebookLoginURL = "https://linkedout-4711.herokuapp.com/login#" + badgebookLoginReturnURL;
+const badgebookLoginReturnURL = window.location.host + "/game.html"
+const badgebookLoginURL = "https://linkedout-dev.herokuapp.com/login";
 
 $(() => {
     $('#login').on('click touchstart', login);

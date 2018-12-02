@@ -9,8 +9,6 @@ var login = (userid) => {
     console.log(userid);
     let usernameQuery = firebase.database().ref("users/"+userid+"/username");
     usernameQuery.once("value").then( (snapshot) => {
-        console.log(snapshot);
-        console.log(snapshot.val());
         let username = snapshot.val();
 
         controller = new Controller(view, username, userid);
@@ -26,22 +24,28 @@ var login = (userid) => {
 }
 
 if (userid !== undefined && userid != null) {
-    console.log(userid);
     login(userid);
 } else {
     let locationHash = window.location.hash;
     let urlSplit = locationHash.split('#');
     let userid;
-    if (urlSplit.length > 1) {
+    let token;
+    if (urlSplit.length > 2) {
         userid = urlSplit[1];
+        token = urlSplit[2];
     }
     if (userid) {
-        console.log(userid);
-        sessionStorage.setItem("userid", userid);
-        window.location.href = './game.html';
+        let externalTokenQuery = firebase.database().ref("tokens/badgebook");
+        externalTokenQuery.once("value").then((snapshot) => {
+            if (snapshot.val() == token) {
+                sessionStorage.setItem("userid", userid);
+                window.location.href = './game.html';
+            } else {
+                window.location.href = './index.html';
+            }
+        });
     }
 }
-
 
 // firebase.auth().onAuthStateChanged( (user) => {
 //     if (user) {

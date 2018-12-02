@@ -62,26 +62,9 @@ app.post('/api/1.0/top', (req, res) => {
   });
 });
 
-app.get('/test', (req, res) => {
-  var post_options = {
-    host: 'localhost',
-    port: '3000',
-    path: '/badgebooklogin',
-    method: 'POST',
-  };
-  console.log("making post request");
-  var post_req = http.request(post_options, function(res) {
-    
-  });
-  
-  post_req.write("");
-  post_req.end();
-  res.end();
-});
-
-app.post('/badgebooklogin', (req, res) => {
-  console.log("redirecting");
-  res.redirect('/game.html#nebraska');
+// app.post('/badgebooklogin', (req, res) => {
+//   console.log("redirecting");
+//   res.redirect('/game.html#nebraska');
   // console.log("post request received");
   // let userid = req.body.userid;
   // let externalTokenQuery = firebase.database().ref("tokens/badgebook");
@@ -95,12 +78,11 @@ app.post('/badgebooklogin', (req, res) => {
   //     res.end();
   //   }
   // });
-});
+// });
 
-
-app.get('/badgebooklogin', (req, res) => {
-  console.log("redirecting!");
-  res.redirect('/game.html#nebraska');
+// app.get('/badgebooklogin', (req, res) => {
+//   console.log("redirecting!");
+//   res.redirect('/game.html#nebraska');
   // console.log("post request received");
   // let userid = req.body.userid;
   // let externalTokenQuery = firebase.database().ref("tokens/badgebook");
@@ -114,7 +96,7 @@ app.get('/badgebooklogin', (req, res) => {
   //     res.end();
   //   }
   // });
-});
+// });
 
 
 var badgebookQuery = (req, res) => {
@@ -146,26 +128,6 @@ var topQuery = (req, res) => {
       appname: "Space Defense",
       topUsers: topUsers
     });
-  });
-}
-
-var badgebookWriteOnWall = (userid) => {
-  let tokenQuery = firebase.database().ref("tokens/badgebook");
-  tokenQuery.once("value").then((snapshot) => {
-    let token = snapshot.val();
-    request.post(
-      'badgebook wall url',
-      { 
-        json : { 
-          token : token,
-          // ...
-        }
-      },
-      (error, response, body) => {
-        if (!error && response.statusCode == 200) {
-            console.log(body)
-        }
-      });
   });
 }
 
