@@ -99,7 +99,7 @@ app.post('/badgebooklogin', (req, res) => {
 
 
 app.get('/badgebooklogin', (req, res) => {
-  console.log("redirecting");
+  console.log("redirecting!");
   res.redirect('/game.html#nebraska');
   // console.log("post request received");
   // let userid = req.body.userid;
