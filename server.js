@@ -16,6 +16,7 @@ firebase.initializeApp(config);
 
 
 // Import express framework
+let http = require('http');
 let express = require('express');
 let bodyParser = require('body-parser');
 let request = require('request');
@@ -61,18 +62,60 @@ app.post('/api/1.0/top', (req, res) => {
   });
 });
 
-app.post('/badgebooklogin', (req, res) => {
-  let userid = req.body.userid;
-  let externalTokenQuery = firebase.database().ref("tokens/badgebook");
-  externalTokenQuery.once("value").then((snapshot) => {
-    if (snapshot.val() == req.body.apptoken) {
-      res.redirect('/game.html#'+userid);
-    } else {
-      res.json("Invalid token");
-      res.end();
-    }
+app.get('/test', (req, res) => {
+  var post_options = {
+    host: 'localhost',
+    port: '3000',
+    path: '/badgebooklogin',
+    method: 'POST',
+  };
+  console.log("making post request");
+  var post_req = http.request(post_options, function(res) {
+    
   });
+  
+  post_req.write("");
+  post_req.end();
+  res.end();
 });
+
+app.post('/badgebooklogin', (req, res) => {
+  console.log("redirecting");
+  res.redirect('/game.html#nebraska');
+  // console.log("post request received");
+  // let userid = req.body.userid;
+  // let externalTokenQuery = firebase.database().ref("tokens/badgebook");
+  // externalTokenQuery.once("value").then((snapshot) => {
+  //   console.log("reading");
+  //   if (snapshot.val() == req.body.apptoken) {
+  //     console.log("redirecting");
+  //     res.redirect('/game.html#'+userid);
+  //   } else {
+  //     res.json("Invalid token");
+  //     res.end();
+  //   }
+  // });
+});
+
+
+app.get('/badgebooklogin', (req, res) => {
+  console.log("redirecting");
+  res.redirect('/game.html#nebraska');
+  // console.log("post request received");
+  // let userid = req.body.userid;
+  // let externalTokenQuery = firebase.database().ref("tokens/badgebook");
+  // externalTokenQuery.once("value").then((snapshot) => {
+  //   console.log("reading");
+  //   if (snapshot.val() == req.body.apptoken) {
+  //     console.log("redirecting");
+  //     res.redirect('/game.html#'+userid);
+  //   } else {
+  //     res.json("Invalid token");
+  //     res.end();
+  //   }
+  // });
+});
+
 
 var badgebookQuery = (req, res) => {
   let badgebookUserId = req.body.userid;
