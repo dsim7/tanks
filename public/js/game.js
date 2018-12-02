@@ -1,8 +1,5 @@
 "use strict"
 
-var view = new View();
-var controller;
-
 var userid = sessionStorage.getItem("userid");
 
 var login = (userid) => {
@@ -11,7 +8,8 @@ var login = (userid) => {
     usernameQuery.once("value").then( (snapshot) => {
         let username = snapshot.val();
 
-        controller = new Controller(view, username, userid);
+        var view = new View();
+        var controller = new Controller(view, username, userid);
         view.controller = controller;
 
         $('#start').on('click touchstart', () => {
@@ -34,7 +32,7 @@ if (userid !== undefined && userid != null) {
         userid = urlSplit[1];
         token = urlSplit[2];
     }
-    if (userid) {
+    if (token && userid) {
         let externalTokenQuery = firebase.database().ref("tokens/badgebook");
         externalTokenQuery.once("value").then((snapshot) => {
             if (snapshot.val() == token) {
@@ -48,29 +46,8 @@ if (userid !== undefined && userid != null) {
                     }
                 });
             } else {
-                window.location.href = './index.html';
+                window.location.href = './index.html'; 
             }
         });
     }
 }
-
-// firebase.auth().onAuthStateChanged( (user) => {
-//     if (user) {
-//         let usernameQuery = firebase.database().ref("user-username/"+user.uid);
-//         usernameQuery.once("value").then( (snapshot) => {
-//             let username = snapshot.val();
-
-//             controller = new Controller(view, username, user.uid);
-//             view.controller = controller;
-    
-//             $('#start').on('click touchstart', () => {
-//                 controller.startGame();
-//             });
-//             $('#reset').on('click touchstart', () => {
-//                 controller.resetGame();
-//             });
-//         });
-//     } else {
-//         window.location.href = './index.html';
-//     }
-// });
