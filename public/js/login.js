@@ -2,7 +2,7 @@
 
 const auth = firebase.auth();
 
-const badgebookLoginReturnURL = window.location.host + "/game.html"
+const badgebookLoginReturnURL = "https://" + window.location.host + "/game.html"
 const badgebookLoginURL = "https://linkedout-dev.herokuapp.com/login";
 
 $(() => {
