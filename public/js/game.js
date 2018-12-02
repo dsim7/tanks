@@ -38,8 +38,15 @@ if (userid !== undefined && userid != null) {
         let externalTokenQuery = firebase.database().ref("tokens/badgebook");
         externalTokenQuery.once("value").then((snapshot) => {
             if (snapshot.val() == token) {
-                sessionStorage.setItem("userid", userid);
-                window.location.href = './game.html';
+                let userQuery = firebase.database().ref("users/"+userid);
+                userQuery.once("value").then((snapshot) => {
+                    if (snapshot.val() != null) {
+                        sessionStorage.setItem("userid", userid);
+                        window.location.href = './game.html';
+                    } else {
+                        window.location.href = './index.html';
+                    }
+                });
             } else {
                 window.location.href = './index.html';
             }
