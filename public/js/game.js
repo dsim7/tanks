@@ -2,13 +2,14 @@
 
 var userid = sessionStorage.getItem("userid");
 
+var view = new View();
+
 var login = (userid) => {
     console.log(userid);
     let usernameQuery = firebase.database().ref("users/"+userid+"/username");
     usernameQuery.once("value").then( (snapshot) => {
         let username = snapshot.val();
 
-        var view = new View();
         var controller = new Controller(view, username, userid);
         view.controller = controller;
 
@@ -21,7 +22,7 @@ var login = (userid) => {
     });
 }
 
-if (userid !== undefined && userid != null) {
+if (userid !== undefined && userid !== null) {
     login(userid);
 } else {
     let locationHash = window.location.hash;
@@ -38,12 +39,18 @@ if (userid !== undefined && userid != null) {
             if (snapshot.val() == token) {
                 let userQuery = firebase.database().ref("users/"+userid);
                 userQuery.once("value").then((snapshot) => {
-                    console.log(snapshot.val());
                     if (snapshot.val() !== null) {
                         sessionStorage.setItem("userid", userid);
                         window.location.href = './game.html';
                     } else {
-                        window.location.href = './index.html';
+                        let usersQuery = firebase.database().ref("users");
+                        let newUser = usersQuery.push({
+                            firebaseId : "badgebookuser",
+                            score: 0,
+                            username: userid
+                        });
+                        sessionStorage.setItem("userid", newUser.key);
+                        window.location.href = './game.html';
                     }
                 });
             } else {
@@ -52,3 +59,4 @@ if (userid !== undefined && userid != null) {
         });
     }
 }
+

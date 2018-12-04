@@ -102,17 +102,31 @@ app.post('/api/1.0/top', (req, res) => {
 var badgebookQuery = (req, res) => {
   let badgebookUserId = req.body.userid;
 
-  let userQuery = firebase.database().ref("users/"+badgebookUserId);
-  userQuery.once("value").then((snapshot) => {
-    let score = snapshot.child("score").val();
-    res.json({
-      user: badgebookUserId,
-      appname: "Space Defense",
-      badgetype: "Score",
-      value: score
+  let usersQuery = firebase.database().ref("users")
+  usersQuery.orderByChild('username').equalTo(badgebookUserId).limitToFirst(1).once("value", (snapshot) => {
+    snapshot.forEach((childsnapshot) => {
+      let score = childsnapshot.child("score").val();
+      res.json({
+        user: badgebookUserId,
+        appname: "Space Defense",
+        badgetype: "Score",
+        value: score
+      });
+      res.end();
     });
-    res.end();
   });
+
+  // let userQuery = firebase.database().ref("users/"+badgebookUserId);
+  // userQuery.once("value").then((snapshot) => {
+  //   let score = snapshot.child("score").val();
+  //   res.json({
+  //     user: badgebookUserId,
+  //     appname: "Space Defense",
+  //     badgetype: "Score",
+  //     value: score
+  //   });
+  //   res.end();
+  // });
 }
 
 var topQuery = (req, res) => {

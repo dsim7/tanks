@@ -28,7 +28,6 @@ class Controller {
         });
 
         this.socket.on('score', (msg) => {
-            console.log(msg);
             this.updateUserScores(msg.user1, msg.user2, msg.score);
         });
     }
