@@ -62,43 +62,6 @@ app.post('/api/1.0/top', (req, res) => {
   });
 });
 
-// app.post('/badgebooklogin', (req, res) => {
-//   console.log("redirecting");
-//   res.redirect('/game.html#nebraska');
-  // console.log("post request received");
-  // let userid = req.body.userid;
-  // let externalTokenQuery = firebase.database().ref("tokens/badgebook");
-  // externalTokenQuery.once("value").then((snapshot) => {
-  //   console.log("reading");
-  //   if (snapshot.val() == req.body.apptoken) {
-  //     console.log("redirecting");
-  //     res.redirect('/game.html#'+userid);
-  //   } else {
-  //     res.json("Invalid token");
-  //     res.end();
-  //   }
-  // });
-// });
-
-// app.get('/badgebooklogin', (req, res) => {
-//   console.log("redirecting!");
-//   res.redirect('/game.html#nebraska');
-  // console.log("post request received");
-  // let userid = req.body.userid;
-  // let externalTokenQuery = firebase.database().ref("tokens/badgebook");
-  // externalTokenQuery.once("value").then((snapshot) => {
-  //   console.log("reading");
-  //   if (snapshot.val() == req.body.apptoken) {
-  //     console.log("redirecting");
-  //     res.redirect('/game.html#'+userid);
-  //   } else {
-  //     res.json("Invalid token");
-  //     res.end();
-  //   }
-  // });
-// });
-
-
 var badgebookQuery = (req, res) => {
   let badgebookUserId = req.body.userid;
 
@@ -115,18 +78,6 @@ var badgebookQuery = (req, res) => {
       res.end();
     });
   });
-
-  // let userQuery = firebase.database().ref("users/"+badgebookUserId);
-  // userQuery.once("value").then((snapshot) => {
-  //   let score = snapshot.child("score").val();
-  //   res.json({
-  //     user: badgebookUserId,
-  //     appname: "Space Defense",
-  //     badgetype: "Score",
-  //     value: score
-  //   });
-  //   res.end();
-  // });
 }
 
 var topQuery = (req, res) => {

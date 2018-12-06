@@ -27,27 +27,32 @@ if (userid !== undefined && userid !== null) {
 } else {
     let locationHash = window.location.hash;
     let urlSplit = locationHash.split('#');
-    let userid;
+    let username;
     let token;
     if (urlSplit.length > 2) {
-        userid = urlSplit[1];
+        username = urlSplit[1];
         token = urlSplit[2];
     }
-    if (token && userid) {
+    if (token && username) {
+        console.log("in token");    
         let externalTokenQuery = firebase.database().ref("tokens/badgebook");
         externalTokenQuery.once("value").then((snapshot) => {
             if (snapshot.val() == token) {
-                let userQuery = firebase.database().ref("users/"+userid);
-                userQuery.once("value").then((snapshot) => {
-                    if (snapshot.val() !== null) {
-                        sessionStorage.setItem("userid", userid);
-                        window.location.href = './game.html';
+                let usersQuery = firebase.database().ref("users");
+                console.log(username)
+                usersQuery.orderByChild('username').equalTo(username).limitToFirst(1).once("value", (snapshot) => {
+                    console.log(snapshot);
+                    if (snapshot) {
+                        snapshot.forEach((childsnapshot) => {
+                            sessionStorage.setItem("userid", childsnapshot.key);
+                            window.location.href = './game.html';
+                        });
                     } else {
                         let usersQuery = firebase.database().ref("users");
                         let newUser = usersQuery.push({
                             firebaseId : "badgebookuser",
                             score: 0,
-                            username: userid
+                            username: username
                         });
                         sessionStorage.setItem("userid", newUser.key);
                         window.location.href = './game.html';
