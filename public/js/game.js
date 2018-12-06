@@ -42,7 +42,7 @@ if (userid !== undefined && userid !== null) {
                 console.log(username)
                 usersQuery.orderByChild('username').equalTo(username).limitToFirst(1).once("value", (snapshot) => {
                     console.log(snapshot);
-                    if (snapshot) {
+                    if (snapshot.hasChildren()) {
                         snapshot.forEach((childsnapshot) => {
                             sessionStorage.setItem("userid", childsnapshot.key);
                             window.location.href = './game.html';
