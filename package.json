@@ -4,7 +4,7 @@
   "description": "a tanks game",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.15.2",
+    "express": "^4.17.3",
     "firebase": "^5.5.8",
     "request": "^2.88.0",
     "socket.io": "^2.1.1"
